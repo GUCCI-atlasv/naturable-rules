@@ -5,7 +5,7 @@ Open, explainable rules for spotting AI-sounding writing: assistant chatter, tem
 - **Try it:** paste a draft at **[naturable.app](https://naturable.app/en/)**. It runs in your browser and nothing is uploaded.
 - **Chrome extension:** underlines these patterns where you type (Gmail, LinkedIn, Notion…). [Coming soon](https://naturable.app/en/chrome-extension/)
 - **Agent Skill:** `skill/` for Claude Code, Codex and other agents. [Install](#agent-skill)
-- **CLI / npm:** `npx naturable-check draft.md` · `import { engine } from "naturable-rules"`
+- **CLI:** `npx github:GUCCI-atlasv/naturable-rules draft.md` (Node 18+, no install)
 - **Word list:** [AI words to avoid](https://naturable.app/en/ai-words-to-avoid/), with [CSV](https://naturable.app/downloads/ai-words-to-avoid.csv) and [JSON](https://naturable.app/downloads/ai-words-to-avoid.json) downloads
 
 > **Not an AI detector.** A hit is a style signal, not evidence of who wrote the text. This project does not help text evade AI detectors and won't add rules for that.
@@ -55,6 +55,10 @@ The full readable list is in [`skill/references/rules-en.md`](skill/references/r
 
 ### JavaScript (browser, extension, worker, Node)
 
+```bash
+npm install github:GUCCI-atlasv/naturable-rules
+```
+
 ```js
 import { engine } from "naturable-rules";
 
@@ -74,11 +78,13 @@ Without a bundler: `dist/naturable.iife.js` exposes `window.Naturable`.
 ### CLI
 
 ```bash
-npx naturable-check draft.md                    # readable report
-npx naturable-check draft.md --json             # for tools and agents
-npx naturable-check draft.md --fix              # auto-safe fixes only
-cat email.txt | npx naturable-check --purpose email
+npx github:GUCCI-atlasv/naturable-rules draft.md           # readable report
+npx github:GUCCI-atlasv/naturable-rules draft.md --json    # for tools and agents
+npx github:GUCCI-atlasv/naturable-rules draft.md --fix     # auto-safe fixes only
+cat email.txt | npx github:GUCCI-atlasv/naturable-rules --purpose email
 ```
+
+Runs straight from this repository (Node 18+, no install). In a clone, `node skill/scripts/naturable-check.mjs draft.md` does the same.
 
 ### Agent Skill
 
