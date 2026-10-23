@@ -5,7 +5,7 @@ Open, explainable rules for spotting AI-sounding writing: assistant chatter, tem
 - **Try it:** paste a draft at **[naturable.app](https://naturable.app/en/)**. It runs in your browser and nothing is uploaded.
 - **Chrome extension:** underlines these patterns where you type (Gmail, LinkedIn, Notion…). [Coming soon](https://naturable.app/en/chrome-extension/)
 - **Agent Skill:** `skill/` for Claude Code, Codex and other agents. [Install](#agent-skill)
-- **CLI:** `npx github:GUCCI-atlasv/naturable-rules draft.md` (Node 18+, no install)
+- **CLI / npm:** `npx naturable-rules draft.md` · `npm install naturable-rules`
 - **Word list:** [AI words to avoid](https://naturable.app/en/ai-words-to-avoid/), with [CSV](https://naturable.app/downloads/ai-words-to-avoid.csv) and [JSON](https://naturable.app/downloads/ai-words-to-avoid.json) downloads
 
 > **Not an AI detector.** A hit is a style signal, not evidence of who wrote the text. This project does not help text evade AI detectors and won't add rules for that.
@@ -56,7 +56,7 @@ The full readable list is in [`skill/references/rules-en.md`](skill/references/r
 ### JavaScript (browser, extension, worker, Node)
 
 ```bash
-npm install github:GUCCI-atlasv/naturable-rules
+npm install naturable-rules
 ```
 
 ```js
@@ -78,13 +78,13 @@ Without a bundler: `dist/naturable.iife.js` exposes `window.Naturable`.
 ### CLI
 
 ```bash
-npx github:GUCCI-atlasv/naturable-rules draft.md           # readable report
-npx github:GUCCI-atlasv/naturable-rules draft.md --json    # for tools and agents
-npx github:GUCCI-atlasv/naturable-rules draft.md --fix     # auto-safe fixes only
-cat email.txt | npx github:GUCCI-atlasv/naturable-rules --purpose email
+npx naturable-rules draft.md           # readable report
+npx naturable-rules draft.md --json    # for tools and agents
+npx naturable-rules draft.md --fix     # auto-safe fixes only
+cat email.txt | npx naturable-rules --purpose email
 ```
 
-Runs straight from this repository (Node 18+, no install). In a clone, `node skill/scripts/naturable-check.mjs draft.md` does the same.
+Node 18+. Installed globally (`npm install -g naturable-rules`) the command is `naturable-check`. In a clone, `node skill/scripts/naturable-check.mjs draft.md` does the same.
 
 ### Agent Skill
 
