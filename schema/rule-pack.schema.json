@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://naturable.app/schema/rule-pack.schema.json",
+  "title": "Naturable rule pack",
+  "type": "object",
+  "required": ["version", "language", "released", "layer_order", "rules"],
+  "properties": {
+    "version": { "type": "string", "pattern": "^(en|zh)-v\\d+\\.\\d+$" },
+    "language": { "enum": ["en", "zh"] },
+    "released": { "type": "string", "format": "date" },
+    "beta": { "type": "boolean" },
+    "changelog": { "type": "array", "items": { "type": "string" } },
+    "layer_order": { "type": "array", "items": { "enum": ["hollow", "structure", "artifact", "lexicon"] } },
+    "class_ids": { "type": "array", "items": { "type": "string" } },
+    "banned_rules": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "label", "reason"],
+        "properties": { "id": { "type": "string" }, "label": { "type": "string" }, "reason": { "type": "string" } }
+      }
+    },
+    "rules": { "type": "array", "items": { "$ref": "#/$defs/rule" } }
+  },
+  "$defs": {
+    "rule": {
+      "type": "object",
+      "required": ["id", "name_en", "name_zh", "layer", "category", "severity", "confidence", "detect", "rewrite", "reason", "before", "after", "auto", "evidence_policy"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^(en|zh)\\.[a-z_]+\\.[a-z0-9_]+$" },
+        "class_id": { "type": "string" },
+        "name_en": { "type": "string" },
+        "name_zh": { "type": "string" },
+        "layer": { "enum": ["hollow", "structure", "artifact", "lexicon"] },
+        "category": { "enum": ["evidence", "sentence", "structure", "rhythm", "artifact", "vocabulary"] },
+        "severity": { "enum": ["strong", "suggestion"] },
+        "confidence": { "enum": ["high", "medium", "low"] },
+        "purpose_weights": {
+          "type": "object",
+          "propertyNames": { "enum": ["general", "blog", "email", "marketing", "academic", "social", "technical"] },
+          "additionalProperties": { "type": "number", "minimum": 0, "maximum": 2 }
+        },
+        "detect": {
+          "oneOf": [
+            {
+              "type": "object",
+              "required": ["type", "pattern"],
+              "properties": { "type": { "const": "regex" }, "pattern": { "type": "string" }, "flags": { "type": "string", "pattern": "^[gimsuy]*$" } }
+            },
+            {
+              "type": "object",
+              "required": ["type", "name"],
+              "properties": { "type": { "const": "heuristic" }, "name": { "type": "string" }, "params": { "type": "object" } }
+            }
+          ]
+        },
+        "rewrite": { "type": "string", "description": "What to do (shown as the suggestion)." },
+        "reason": { "type": "string", "description": "Why it reads as AI-ish (shown as the explanation)." },
+        "before": { "type": "string", "description": "Must trigger this rule (checked by scripts/validate.mjs)." },
+        "after": { "type": "string", "description": "Must not trigger this rule." },
+        "auto": { "type": "boolean", "description": "true = safe to apply without review; requires fix." },
+        "fix": {
+          "type": "object",
+          "required": ["type"],
+          "properties": {
+            "type": { "enum": ["delete", "map", "replace_match", "replace"] },
+            "map": { "type": "object", "additionalProperties": { "type": "string" } },
+            "with": { "type": "string" },
+            "strip": { "type": "boolean" }
+          }
+        },
+        "evidence_policy": { "enum": ["never_invent", "keep_numbers"] },
+        "docs": { "type": "string", "format": "uri", "description": "Optional deep link to the rule's page on naturable.app." }
+      }
+    }
+  }
+}
